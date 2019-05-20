@@ -14,7 +14,7 @@ import javax.persistence.Table;
 
 @Data
 @Table(name = "tb_spec_param")
-public class SpecGroupParams {
+public class SpecGroupParam {
 
     @Id
     @KeySql(useGeneratedKeys = true)
