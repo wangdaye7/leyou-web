@@ -37,4 +37,13 @@ public class CategoryService {
         }
         return categories;
     }
+
+    /**
+     * 通过id数组查询分类
+     * @param ids
+     * @return 分类数组
+     */
+    public List<Category> queryByIds(List<Long> ids){
+        return categoryMapper.selectByIdList(ids);
+    }
 }

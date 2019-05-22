@@ -22,7 +22,8 @@ public enum ExceptionEnum {
     UPLOAD_FILE_ERROR(500, "文件上传失败" ),
     FILE_TYPE_ERROR(500, "文件类型错误" ),
     SPEC_GROUP_NOT_FOUND(404, "商品规格组没查到" ),
-    SPEC_GROUP_PARAM_NOT_FOUND(404, "商品规格组参数没查到");
+    SPEC_GROUP_PARAM_NOT_FOUND(404, "商品规格组参数没查到"),
+    GOODS_NOT_FOUND(404, "商品没查到");
     private int code;
     private String message;
 }
