@@ -24,7 +24,9 @@ public enum ExceptionEnum {
     SPEC_GROUP_NOT_FOUND(404, "商品规格组没查到" ),
     SPEC_GROUP_PARAM_NOT_FOUND(404, "商品规格组参数没查到"),
     GOODS_NOT_FOUND(404, "商品没查到"),
-    GOODS_SAVE_ERROR(500, "商品保存失败");
+    GOODS_SAVE_ERROR(500, "商品保存失败"),
+    GOODS_DETAIL_NOT_FOUND(400, "商品信息查询失败"),
+    GOODS_UPDATE_ERROR(500, "商品修改失败");
     private int code;
     private String message;
 }
