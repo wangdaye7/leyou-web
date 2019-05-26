@@ -43,10 +43,36 @@ public class BrandController {
         return ResponseEntity.ok(brandService.queryBrandByPage(page, rows, key, sortBy, desc));
     }
 
+    /**
+     * 新增商品品牌
+     * @param brand
+     * @param cids
+     * @return
+     */
     @PostMapping
     public ResponseEntity<Void> saveBrand(Brand brand, @RequestParam("categories") List<Long> cids){
         brandService.saveBrand(brand, cids);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    /**
+     * 根据品牌ID查询品牌
+     * @param id
+     * @return
+     */
+    @GetMapping("{id}")
+    public ResponseEntity<Brand> queryBrandById(@PathVariable("id") Long id){
+        return ResponseEntity.ok(brandService.queryById(id));
+    }
+
+    /**
+     * 根据分类id查询品牌
+     * @param cid
+     * @return
+     */
+    @GetMapping("cid/{cid}")
+    public ResponseEntity<List<Brand>>  queryBrandByCid(@PathVariable("cid") Long cid){
+        return ResponseEntity.ok(brandService.queryBrandByCid(cid));
     }
 
 }

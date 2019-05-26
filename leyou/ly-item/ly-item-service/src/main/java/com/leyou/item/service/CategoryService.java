@@ -44,6 +44,10 @@ public class CategoryService {
      * @return 分类数组
      */
     public List<Category> queryByIds(List<Long> ids){
-        return categoryMapper.selectByIdList(ids);
+        List<Category> list = categoryMapper.selectByIdList(ids);
+        if (CollectionUtils.isEmpty(list)){
+            throw new LyException(ExceptionEnum.CATEGORY_NOT_FOUND);
+        }
+        return list;
     }
 }

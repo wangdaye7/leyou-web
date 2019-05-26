@@ -41,11 +41,14 @@ public class SpecificationService {
         return groups;
     }
 
-    public List<SpecGroupParam> queryParamByGid(Long gid) {
+    public List<SpecGroupParam> queryParamByGid(Long gid, Long cid, Boolean searching, Boolean generic) {
 
         //创建查询对象
         SpecGroupParam params = new SpecGroupParam();
         params.setGroupId(gid);
+        params.setCid(cid);
+        params.setSearching(searching);
+        params.setGeneric(generic);
 
         //查询
         List<SpecGroupParam> list = specGroupParamMapper.select(params);

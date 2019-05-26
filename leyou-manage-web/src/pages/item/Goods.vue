@@ -120,12 +120,12 @@
         handler() {
           // 变化后的回调函数，这里我们再次调用getDataFromServer即可
           this.getDataFromServer();
-          this.pagination.page = 1;
         }
       },
       filter: {// 监视搜索字段
         handler() {
           this.getDataFromServer();
+          this.pagination.page = 1;
         },
         deep: true
       }

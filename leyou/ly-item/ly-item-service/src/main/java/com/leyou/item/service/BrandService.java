@@ -77,8 +77,16 @@ public class BrandService {
     public Brand queryById(Long brandId) {
         Brand brand = brandMapper.selectByPrimaryKey(brandId);
         if (brand == null) {
-            throw new LyException(ExceptionEnum.BRAND_SAVE_ERROR);
+            throw new LyException(ExceptionEnum.BRAND_NOT_FOUND);
         }
         return brand;
+    }
+
+    public List<Brand> queryBrandByCid(Long cid) {
+        List<Brand> brands = brandMapper.selectBrandByCid(cid);
+        if (CollectionUtils.isEmpty(brands)){
+            throw new LyException(ExceptionEnum.BRAND_NOT_FOUND);
+        }
+        return brands;
     }
 }

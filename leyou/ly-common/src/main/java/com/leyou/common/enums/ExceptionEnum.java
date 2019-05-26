@@ -23,7 +23,8 @@ public enum ExceptionEnum {
     FILE_TYPE_ERROR(500, "文件类型错误" ),
     SPEC_GROUP_NOT_FOUND(404, "商品规格组没查到" ),
     SPEC_GROUP_PARAM_NOT_FOUND(404, "商品规格组参数没查到"),
-    GOODS_NOT_FOUND(404, "商品没查到");
+    GOODS_NOT_FOUND(404, "商品没查到"),
+    GOODS_SAVE_ERROR(500, "商品保存失败");
     private int code;
     private String message;
 }

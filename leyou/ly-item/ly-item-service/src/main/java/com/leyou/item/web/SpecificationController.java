@@ -32,11 +32,15 @@ public class SpecificationController {
 
     /**
      * 根据分组id查询规格组参数
-     * @param gid 组id0
+     * @param gid 组id
      * @return 商品规格参数数组
      */
     @GetMapping("params")
-    public ResponseEntity<List<SpecGroupParam>> queryParams(@RequestParam("gid") Long gid){
-        return ResponseEntity.ok(specService.queryParamByGid(gid));
+    public ResponseEntity<List<SpecGroupParam>> queryParams(@RequestParam(value = "gid", required = false) Long gid,
+        @RequestParam(value = "cid", required = false) Long cid,
+        @RequestParam(value = "searching", required = false) Boolean searching,
+        @RequestParam(value = "generic", required = false) Boolean generic
+        ){
+        return ResponseEntity.ok(specService.queryParamByGid(gid, cid, searching, generic));
     }
 }

@@ -5,18 +5,22 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.leyou.common.enums.ExceptionEnum;
 import com.leyou.common.exception.LyException;
+import com.leyou.item.mapper.SkuMapper;
+import com.leyou.item.mapper.SpuDetailsMapper;
 import com.leyou.item.mapper.SpuMapper;
-import com.leyou.item.pojo.Spu;
-import com.leyou.item.pojo.SpuBo;
+import com.leyou.item.mapper.StockMapper;
+import com.leyou.item.pojo.*;
 import com.leyou.item.vo.PageResult;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,7 +38,12 @@ public class GoodsService {
     private BrandService brandService;
     @Autowired
     private CategoryService categoryService;
-
+    @Autowired
+    private SpuDetailsMapper detailsMapper;
+    @Autowired
+    private StockMapper stockMapper;
+    @Autowired
+    private SkuMapper skuMapper;
     public PageResult<SpuBo> querySpuByPage(Integer page, Integer rows, Boolean saleable, String key) {
         //控制每页大小
         PageHelper.startPage(page, Math.min(rows, 200));
@@ -78,4 +87,43 @@ public class GoodsService {
         return new PageResult<>(spus.getTotal(), spuBos);
     }
 
+    @Transactional
+    public void saveGoods(SpuBo spuBo) {
+
+        //新增spu
+        spuBo.setCreateTime(new Date());
+        spuBo.setLastUpdateTime(spuBo.getCreateTime());
+        spuBo.setId(null);
+        spuBo.setSaleable(true);
+        spuBo.setValid(false);
+        int count = spuMapper.insert(spuBo);
+        if (count != 1) {
+            throw new LyException(ExceptionEnum.GOODS_SAVE_ERROR);
+        }
+        //新增spu_detail
+        SpuDetail spuDetail = spuBo.getSpuDetail();
+        spuDetail.setSpuId(spuBo.getId());
+        detailsMapper.insert(spuDetail);
+        //新增sku
+        List<Sku> skus = spuBo.getSkus();
+        for (Sku sku : skus) {
+            sku.setCreateTime(new Date());
+            sku.setLastUpdateTime(sku.getCreateTime());
+            sku.setSpuId(spuBo.getId());
+
+            count = skuMapper.insert(sku);
+            if (count != 1){
+                throw new LyException(ExceptionEnum.GOODS_SAVE_ERROR);
+            }
+            //新增stock
+            Stock stock = new Stock();
+            stock.setSkuId(sku.getId());
+            stock.setStock(sku.getStock());
+            count = stockMapper.insert(stock);
+            if (count != 1){
+                throw new LyException(ExceptionEnum.GOODS_SAVE_ERROR);
+            }
+        }
+
+    }
 }
