@@ -26,7 +26,7 @@ public class CategoryClientTest {
     private CategoryClient categoryClient;
     @Test
     public void queryCategoryByIds() {
-        List<Category> categories = categoryClient.queryCategoryByIds(Arrays.asList(1L, 2L, 3l));
+        List<Category> categories = categoryClient.queryCategoryByIds(Arrays.asList(1L, 2L, 3L));
         for (Category category : categories) {
             System.out.println("category = " + category);
         }
