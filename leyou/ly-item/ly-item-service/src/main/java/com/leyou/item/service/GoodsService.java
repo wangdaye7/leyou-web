@@ -85,6 +85,39 @@ public class GoodsService {
         return new PageResult<>(spus.getTotal(), spuBos);
     }
 
+   /* public PageResult<SpuBo> testQuerySpuByPage(Integer page, Integer rows, Boolean saleable, String key) {
+        PageHelper.startPage(page, Math.min(200, rows));
+        //创建查询构建器
+        Example example = new Example(Spu.class);
+        Example.Criteria criteria = example.createCriteria();
+        if (saleable != null){
+            criteria.orEqualTo(saleable);
+        }
+
+        if (StringUtils.isNotBlank(key)) {
+            criteria.andLike("title", "%" + key + "%");
+        }
+        List<Spu> spuList = spuMapper.selectByExample(example);
+        PageInfo<Spu> spuPageInfo = new PageInfo<>(spuList);
+
+        List<SpuBo> spuBoList = spuList.stream().map(spu -> {
+            SpuBo spuBo = new SpuBo();
+            BeanUtils.copyProperties(spu, spuBo);
+
+            List<String> cnames = categoryService.queryByIds(Arrays.asList(spu.getCid1(), spu.getCid1(), spu.getCid3()))
+                    .stream().map(Category::getName).collect(Collectors.toList());
+            spuBo.setCname(StringUtils.join(cnames, '/'));
+            spuBo.setBname(brandService.queryById(spu.getBrandId()).getName());
+
+            return spuBo;
+        }).collect(Collectors.toList());
+
+        return new PageResult<>(spuPageInfo.getTotal(), spuBoList);
+    }*/
+
+
+
+
     @Transactional
     public void saveGoods(SpuBo spuBo) {
 
@@ -131,6 +164,46 @@ public class GoodsService {
         count = stockMapper.insertList(stocks);
         if (count != stocks.size()) {
             throw new LyException(ExceptionEnum.GOODS_SAVE_ERROR);
+        }
+    }
+
+
+    public void testSaveGoods(SpuBo spuBo){
+
+        //保存spu
+        spuBo.setId(null);
+        spuBo.setSaleable(true);
+        spuBo.setValid(false);
+        spuBo.setCreateTime(new Date());
+        spuBo.setLastUpdateTime(spuBo.getCreateTime());
+        int spuCount = spuMapper.insert(spuBo);
+        //判断是否保存成功
+
+
+
+        //保存spudetails
+        SpuDetail spuDetail = spuBo.getSpuDetail();
+        spuDetail.setSpuId(spuBo.getId());
+        int detailCount = detailsMapper.insert(spuDetail);
+        //保存sku
+        List<Sku> skuList = spuBo.getSkus();
+        List<Stock> stockList = new ArrayList<>();
+        for (Sku sku : skuList) {
+            sku.setSpuId(spuBo.getId());
+            sku.setId(null);
+            sku.setCreateTime(new Date());
+            sku.setLastUpdateTime(sku.getCreateTime());
+
+            int skuInsert = skuMapper.insert(sku);
+            //保存库存信息
+            Stock stock = new Stock();
+            stock.setStock(sku.getStock());
+            stock.setSkuId(sku.getId());
+            stockList.add(stock);
+        }
+        int stockInsert = stockMapper.insertList(stockList);
+        if (stockInsert != stockList.size()) {
+            //抛出异常
         }
     }
 

@@ -43,4 +43,6 @@ public class CategoryController {
     public ResponseEntity<List<Category>> queryCategoryByIds(@RequestParam("ids") List<Long> ids){
         return ResponseEntity.ok(categoryService.queryByIds(ids));
     }
+
+
 }
