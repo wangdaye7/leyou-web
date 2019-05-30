@@ -13,4 +13,17 @@
     <artifactId>ly-item-interface</artifactId>
 
 
+    <!--  不导入依赖不会提示错误, 但在远程调用的时候会导致请求超时-->
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.leyou.common</groupId>
+            <artifactId>ly-common</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
 </project>

@@ -23,6 +23,7 @@ public class SpecGroupParam {
     private Long groupId;
     private String name;
 
+    //因为numeric为关键字, 注明
     @Column(name = "`numeric`")
     private Boolean numeric;
     private String unit;
